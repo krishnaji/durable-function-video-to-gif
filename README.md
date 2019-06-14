@@ -1,4 +1,6 @@
 # [Azure Durable Functions](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview) : Video to GIF conversion
+![](demo.gif)
+
 This application uses Azure Durable functions, Blob Storage, Event Grid and Application Insights.
 
 ## Provision Functions App and other resources
