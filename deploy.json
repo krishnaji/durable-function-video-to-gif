@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
        "storageAccounts_name": {
-            "defaultValue": "vit2gifsa",
+            "defaultValue": "vid2gifsa",
             "type": "String"
         },
         "videos_blob_container_name":{
