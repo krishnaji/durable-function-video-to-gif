@@ -5,7 +5,7 @@ This application uses Azure Durable functions, Blob Storage, Event Grid and Appl
 
 ## Provision Functions App and other resources
 ### Deploy to Azure button
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fkrishnaji%2Fdurable-function-video-to-gif%2Fmaster%2Fdeploy.json>)
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fkrishnaji%2Fdurable-function-video-to-gif%2Fmaster%2Fdeploy.json)
 
 ### Deploy using Azure CLI
 
