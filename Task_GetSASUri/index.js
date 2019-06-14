@@ -1,7 +1,7 @@
 ﻿//https://github.com/Azure/azure-storage-node/blob/master/examples/samples/sassample.js
 const storage = require('../storageService/storageClient');
 module.exports = async function (context) {
-    context.log (`Hello ${context.bindings.name}!`);
+    context.log (`AAAAAAAAAAAA1111111111111111!`);
     const blobService = await storage.client();
     const BlobUtilities = await storage.blobUtilities();
     const container = context.bindings.name.container;
@@ -19,7 +19,6 @@ module.exports = async function (context) {
     };
   
     const sharedAccessSignatureToken = blobService.generateSharedAccessSignature(container, blobName, sharedAccessPolicy);
-    context.log(blobService.getUrl(container, blobName, sharedAccessSignatureToken, true));
     
     return {
         uri: blobService.getUrl(container, blobName, sharedAccessSignatureToken, true)

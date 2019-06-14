@@ -1,14 +1,14 @@
-﻿/*
- * This function is not intended to be invoked directly. Instead it will be
- * triggered by an orchestrator function.
- * 
- * Before running this sample, please:
- * - create a Durable orchestration function
- * - create a Durable HTTP starter function
- * - run 'npm install durable-functions' from the wwwroot folder of your
- *   function app in Kudu
- */
-
-module.exports = async function (context) {
-    return `Hello ${context.bindings.name}!`;
+﻿const storage = require('../storageService/storageClient');
+module.exports = function (context) {
+    const blobService = storage.client();
+    const container = context.bindings.name.containerName;
+    const blobName = context.bindings.name.fileName;
+    context.log(`AAAAAAAAAAAA4444444444444444444 ${context.bindings.name.fileName},${context.bindings.name.containerName}!`);
+    
+    blobService.createBlockBlobFromLocalFile(container, blobName, blobName,function (error) {
+        if (error) {
+            throw error;
+        }
+        context.done();
+    });
 };

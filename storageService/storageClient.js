@@ -2,16 +2,17 @@ const azure = require('azure-storage');
 let _client;
 let _blobutil;
 module.exports = {
-    client: async() =>  {
+    client: () =>  {
+        
     if (!_client) {
-        _client = await azure.createBlobService(); 
+        _client =  azure.createBlobService(); 
     }
     
     return _client;
 },
- blobUtilities: async () => {
+ blobUtilities:  () => {
     if (!_blobutil) {
-        _blobutil = await azure.BlobUtilities; 
+        _blobutil =  azure.BlobUtilities; 
     }
     return _blobutil;
 }

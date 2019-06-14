@@ -1,14 +1,11 @@
-﻿/*
- * This function is not intended to be invoked directly. Instead it will be
- * triggered by an orchestrator function.
- * 
- * Before running this sample, please:
- * - create a Durable orchestration function
- * - create a Durable HTTP starter function
- * - run 'npm install durable-functions' from the wwwroot folder of your
- *   function app in Kudu
- */
+﻿const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const spawn = require('child_process').spawn;
 
-module.exports = async function (context) {
-    return `Hello ${context.bindings.name}!`;
+module.exports =  function (context) {
+      const gifName = (context.bindings.name.split('.'))[0]+'.gif';
+      const ffmpeg=   spawn(ffmpegPath, ['-i',context.bindings.name,'-f','gif',gifName]);   
+      context.log(`AAAAAAAAAAAA3333333`);
+      ffmpeg.on('exit',()=>{
+        context.done(null, {fileName:gifName});
+      });
 };
