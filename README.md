@@ -1,7 +1,7 @@
 
-storageName=spablob
-endpoint=https://64480578.ngrok.io/runtime/webhooks/eventgrid?functionName=blobEGTrigger
-resourceGroup=Apps
+storageName=<storageaccountname>
+endpoint='https://<function-app-name>.azurewebsites.net/runtime/webhooks/eventgrid?functionName=blobEGTrigger&code=<host-key>'
+resourceGroup=<resource-group-name>
 storageid=$(az storage account show --name $storageName --resource-group $resourceGroup --query id --output tsv)
 
 
@@ -10,5 +10,3 @@ az eventgrid event-subscription create \
   --name videoUploaded \
   --endpoint $endpoint \
   --subject-begins-with '/blobServices/default/containers/videos'
-
- 

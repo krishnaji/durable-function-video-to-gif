@@ -1,0 +1,152 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+       "storageAccounts_name": {
+            "defaultValue": "vit2gifsa",
+            "type": "String"
+        },
+        "videos_blob_container_name":{
+            "type": "String",
+           "defaultValue":"videos"
+       },
+       "gifs_blob_container_name":{
+        "type": "String",
+       "defaultValue":"gifs"
+   },
+   "app_svc_plan_name": {
+    "defaultValue": "Vid-Gif",
+    "type": "String"
+    },
+   "function_app_name": {
+    "defaultValue": "vid-to-gif",
+    "type": "String"
+},
+"runtime": {
+    "type": "string",
+    "defaultValue": "node",
+    "allowedValues": ["node", "dotnet", "java"]
+  },
+"config_web_name": {    
+    "defaultValue": "web",
+    "type": "String"
+}
+    },
+    "variables": {    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "name": "[parameters('storageAccounts_name')]",
+            "apiVersion": "2018-07-01",
+            "location": "[resourceGroup().location]",
+            "resources": [
+                {
+                    "name": "[concat('default/', parameters('videos_blob_container_name'))]",
+                    "type": "blobServices/containers",
+                    "apiVersion": "2018-07-01",
+                    "properties":{
+                        "publicAccess":"None"
+                    },
+                    "dependsOn": [
+                        "[parameters('storageAccounts_name')]"
+                    ]
+                },
+                {
+                    "name": "[concat('default/', parameters('gifs_blob_container_name'))]",
+                    "type": "blobServices/containers",
+                    "apiVersion": "2018-07-01",
+                    "properties":{
+                        "publicAccess":"None"
+                    },
+                    "dependsOn": [
+                        "[parameters('storageAccounts_name')]"
+                    ]
+                }
+            ],
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2015-05-01",
+            "name": "[parameters('function_app_name')]",
+            "type": "Microsoft.Insights/components",
+            "kind": "web",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('function_app_name'))]": "Resource"
+            },
+            "properties": {
+                "Application_Type": "web",
+                "ApplicationId": "[parameters('function_app_name')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "EP1"
+            },
+            "name": "[parameters('app_svc_plan_name')]",
+            "apiVersion": "2016-09-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "name": "[parameters('app_svc_plan_name')]"
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "name": "[parameters('function_app_name')]",
+            "apiVersion": "2016-08-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('app_svc_plan_name'))]",
+                "siteConfig": { 
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_name'), ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                        },
+                        {
+                            "name": "AZURE_STORAGE_CONNECTION_STRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',  parameters('storageAccounts_name'), ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "node"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "10.14.1"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',  parameters('storageAccounts_name'), ';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value )]"
+                          },
+                          {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower(parameters('function_app_name'))]"
+                          },
+                          {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('microsoft.insights/components/', parameters('function_app_name')), '2015-05-01').InstrumentationKey]"
+                          }
+                    ] 
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('app_svc_plan_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_name'))]",
+                "[resourceId('microsoft.insights/components/', parameters('function_app_name'))]"
+            ]
+        }
+    ]
+}
