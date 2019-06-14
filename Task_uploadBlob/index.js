@@ -4,8 +4,9 @@ module.exports = function (context) {
     const blobService = storage.client();
     const container = context.bindings.name.containerName;
     const blobName = context.bindings.name.fileName;
+    const uploadAsFileName = (context.bindings.name.originalFileName).split('.')[0];
     
-    blobService.createBlockBlobFromLocalFile(container, blobName, blobName,function (error) {
+    blobService.createBlockBlobFromLocalFile(container, uploadAsFileName+'-'+blobName, blobName,function (error) {
         if (error) {
             throw error;
         }
