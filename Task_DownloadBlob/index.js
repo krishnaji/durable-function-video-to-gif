@@ -1,7 +1,7 @@
 ﻿const storage = require('../storageService/storageClient');
 const uuid = require('uuid');
 module.exports = async function (context) {
-    context.log('AAAAAAAAAAAA222222222222222');
+    context.log('@@@ Activity 2 @@@'); 
     const blobService = await storage.client();
     const container = context.bindings.name.container;
     const blobName = context.bindings.name.blob;

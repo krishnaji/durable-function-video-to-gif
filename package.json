@@ -10,6 +10,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.0.18",
     "azure-arm-containerinstance": "^5.4.0",
     "azure-storage": "^2.10.3",
-    "durable-functions": "^1.2.2"
+    "durable-functions": "^1.2.2",
+    "rimraf": "^2.6.3"
   }
 }
