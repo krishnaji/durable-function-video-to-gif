@@ -4,29 +4,33 @@
 This application uses Azure Durable functions, Blob Storage, Event Grid, Application Insights and ffmpeg.
 
 ## Provision Functions App and other resources
+Use one of the below deploy options to provision the resources. 
+
 ### Deploy to Azure button
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fkrishnaji%2Fdurable-function-video-to-gif%2Fmaster%2Fdeploy.json)
 
 ### Deploy using Azure CLI
 
-az group deployment create --resource-group ```<resource-group-name>``` --name ```<deployment-name>``` --template-file deploy.json
+``` 
+az group deployment create --resource-group <resource-group-name> --name <deployment-name>--template-file deploy.json 
+```
 
-Use of the above method to provision the resources. Once deployed you should see below resources in the resource group.
+Once deployed you should see below resources in the resource group.
 
 - App Service plan(Premium EP1 plan, read more about [Azure functions Premium](https://docs.microsoft.com/en-us/azure/azure-functions/functions-premium-plan) plan)
-- Storage account (with )
+- Storage account
 - App Service - Function App
 - Application Insights
 
 ## Deploy application code
-To deploy the function application please follow [these](https://docs.microsoft.com/en-us/azure/azure-functions/functions-continuous-deployment) steps. Or use [VS Code](https://code.visualstudio.com/tutorials/functions-extension/deploy-app) to deploy the application.
+To deploy the functions application code please follow [these](https://docs.microsoft.com/en-us/azure/azure-functions/functions-continuous-deployment) steps. Or use [VS Code](https://code.visualstudio.com/tutorials/functions-extension/deploy-app) to deploy the application.
 
 ## Create Event Grid Subscription
-Event Grid is used to trigger the functions app when a new Video is added to Vidoes blob containers. 
+In this application Event Grid is used to trigger the functions app when a new Video is added to videos blob containers. 
 Before we create event grid subscription we need to get system key. Replace code= with your master key.
 https://```<function-app-name>```.azurewebsites.net/admin/host/systemkeys/eventgrid_extension?```code=<master-key>```
  
-This should result in somethng like below.
+This should result in something like below.
 ```json
 {"name": "eventgrid_extension",
 "value": "2aSighjJgTUxhaOaCBN91QA0y5celLfFP1WOKzTasdfdf2THig==",
