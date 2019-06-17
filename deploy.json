@@ -6,14 +6,6 @@
             "defaultValue": "vid2gifsa",
             "type": "String"
         },
-        "videos_blob_container_name": {
-            "type": "String",
-            "defaultValue": "videos"
-        },
-        "gifs_blob_container_name": {
-            "type": "String",
-            "defaultValue": "gifs"
-        },
         "app_svc_plan_name": {
             "defaultValue": "Vid-Gif",
             "type": "String"
@@ -30,10 +22,6 @@
                 "dotnet",
                 "java"
             ]
-        },
-        "config_web_name": {
-            "defaultValue": "web",
-            "type": "String"
         }
     },
     "variables": {},
@@ -50,7 +38,7 @@
             "location": "[resourceGroup().location]",
             "resources": [
                 {
-                    "name": "[concat('default/', parameters('videos_blob_container_name'))]",
+                    "name": "[concat('default/', 'videos')]",
                     "type": "blobServices/containers",
                     "apiVersion": "2018-07-01",
                     "properties": {
@@ -61,7 +49,7 @@
                     ]
                 },
                 {
-                    "name": "[concat('default/', parameters('gifs_blob_container_name'))]",
+                    "name": "[concat('default/', 'gifs')]",
                     "type": "blobServices/containers",
                     "apiVersion": "2018-07-01",
                     "properties": {
